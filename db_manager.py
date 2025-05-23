@@ -1,4 +1,5 @@
 import sqlite3
+from json_loader import load_json_data
 
 DB_NAME = "music_app.db"
 
@@ -69,29 +70,69 @@ def get_all_songs():
 
 
 def insert_song(title, url, artist_name, genre_name):
-    conn = sqlite3.connect(DB_NAME)
+    conn = connect_db()
     cursor = conn.cursor()
 
     cursor.execute('SELECT id FROM artists WHERE name = ?', (artist_name,))
-    artist_id = cursor.fetchone()
-    if artist_id:
-        artist_id = artist_id[0]
+    artist = cursor.fetchone()
+    if artist:
+        artist_id = artist[0]
     else:
         cursor.execute('INSERT INTO artists (name) VALUES (?)', (artist_name,))
         artist_id = cursor.lastrowid
 
     cursor.execute('SELECT id FROM genres WHERE name = ?', (genre_name,))
-    genre_id = cursor.fetchone()
-    if genre_id:
-        genre_id = genre_id[0]
+    genre = cursor.fetchone()
+    if genre:
+        genre_id = genre[0]
     else:
         cursor.execute('INSERT INTO genres (name) VALUES (?)', (genre_name,))
         genre_id = cursor.lastrowid
 
     cursor.execute('''
-        INSERT INTO songs (title, youtube_url, artist_id, genre_id)
-        VALUES (?, ?, ?, ?)
-    ''', (title, url, artist_id, genre_id))
+        SELECT id FROM songs
+        WHERE title = ? AND artist_id = ? AND genre_id = ?
+    ''', (title, artist_id, genre_id))
+    song = cursor.fetchone()
+    if not song:
+        cursor.execute('''
+            INSERT INTO songs (title, youtube_url, artist_id, genre_id)
+            VALUES (?, ?, ?, ?)
+        ''', (title, url, artist_id, genre_id))
 
     conn.commit()
     conn.close()
+
+
+def insert_initial_data():
+    try:
+        songs, genres, artists = load_json_data()
+    except Exception as e:
+        print(f"Грешка при зареждане на JSON: {e}")
+        return
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    for artist in artists:
+        name = artist.get('name', '')
+        cursor.execute('SELECT id FROM artists WHERE name = ?', (name,))
+        if not cursor.fetchone():
+            cursor.execute('INSERT INTO artists (name) VALUES (?)', (name,))
+
+    for genre in genres:
+        name = genre.get('name', '')
+        cursor.execute('SELECT id FROM genres WHERE name = ?', (name,))
+        if not cursor.fetchone():
+            cursor.execute('INSERT INTO genres (name) VALUES (?)', (name,))
+
+    conn.commit()
+    conn.close()
+
+    for song in songs:
+        insert_song(
+            title=song.get('title', ''),
+            url=song.get('youtube_url', ''),
+            artist_name=song.get('artist', ''),
+            genre_name=song.get('genre', '')
+        )

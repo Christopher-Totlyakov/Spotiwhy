@@ -1,0 +1,40 @@
+{
+    "songs": [
+      {
+        "title": "ererer",
+        "artist": "eeeeeeeeeeeeee",
+        "genre": "Rrrrrrrrrrrrock",
+        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA"
+      },
+      {
+        "title": "Hey Jude",
+        "artist": "The Beatles",
+        "genre": "Rock",
+        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA"
+      },
+      {
+        "title": "Bohemian Rhapsody",
+        "artist": "Queen",
+        "genre": "Rock",
+        "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ"
+      },
+      {
+        "title": "122",
+        "artist": "Adele",
+        "genre": "Pop",
+        "youtube_url": "https://www.youtube.com/watch?v=YQHsXMglC9A"
+      }
+    ],
+    "genres": [
+      { "name": "Rock" },
+      { "name": "Pop" },
+      { "name": "Jazz" },
+      { "name": "test" }
+    ],
+    "artists": [
+      { "name": "The Beatles" },
+      { "name": "Queen" },
+      { "name": "Adele" }
+    ]
+  }
+  
