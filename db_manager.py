@@ -35,3 +35,49 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
+
+def get_all_artists():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('SELECT name FROM artists')
+    artists = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return artists
+
+
+def get_all_genres():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('SELECT name FROM genres')
+    genres = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return genres
+
+
+def insert_song(title, url, artist_name, genre_name):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id FROM artists WHERE name = ?', (artist_name,))
+    artist_id = cursor.fetchone()
+    if artist_id:
+        artist_id = artist_id[0]
+    else:
+        cursor.execute('INSERT INTO artists (name) VALUES (?)', (artist_name,))
+        artist_id = cursor.lastrowid
+
+    cursor.execute('SELECT id FROM genres WHERE name = ?', (genre_name,))
+    genre_id = cursor.fetchone()
+    if genre_id:
+        genre_id = genre_id[0]
+    else:
+        cursor.execute('INSERT INTO genres (name) VALUES (?)', (genre_name,))
+        genre_id = cursor.lastrowid
+
+    cursor.execute('''
+        INSERT INTO songs (title, youtube_url, artist_id, genre_id)
+        VALUES (?, ?, ?, ?)
+    ''', (title, url, artist_id, genre_id))
+
+    conn.commit()
+    conn.close()

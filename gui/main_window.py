@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from db_manager import connect_db
+from gui.add_song_tab import create_add_song_tab
 
 
 class MainWindow(tk.Tk):
@@ -49,5 +50,12 @@ class MainWindow(tk.Tk):
 
 
 def run():
-    app = MainWindow()
-    app.mainloop()
+    root = tk.Tk()
+    root.title("Музикално приложение")
+
+    notebook = ttk.Notebook(root)
+    notebook.pack(fill='both', expand=True)
+
+    create_add_song_tab(notebook)
+
+    root.mainloop()
