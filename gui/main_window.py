@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from gui.add_song_page import AddSongPage
 from gui.home_page import HomePage
-
+from gui.import_json_page import ImportJsonPage
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -21,12 +21,16 @@ class MainWindow(tk.Tk):
             nav_frame, text="Добави песен", command=lambda: self.show_frame("AddSongPage"))
         btn_add_song.pack(pady=10)
 
+        btn_import_json = ttk.Button(
+            nav_frame, text="Добави съществуващ плейлист", command=lambda: self.show_frame("ImportJsonPage"))
+        btn_import_json.pack(pady=10)
+
         self.container = tk.Frame(self)
         self.container.pack(side="right", fill="both", expand=True)
 
         self.frames = {}
 
-        for PageClass in (HomePage, AddSongPage):
+        for PageClass in (HomePage, AddSongPage, ImportJsonPage):
             page_name = PageClass.__name__
             frame = PageClass(parent=self.container, controller=self)
             self.frames[page_name] = frame

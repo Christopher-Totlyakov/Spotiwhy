@@ -69,6 +69,42 @@ def get_all_songs():
     return results
 
 
+def insert_artist(name):
+    """
+    Добавя изпълнител, ако не съществува вече.
+    """
+    if not name:
+        return
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id FROM artists WHERE name = ?', (name,))
+    if not cursor.fetchone():
+        cursor.execute('INSERT INTO artists (name) VALUES (?)', (name,))
+
+    conn.commit()
+    conn.close()
+
+
+def insert_genre(name):
+    """
+    Добавя жанр, ако не съществува вече.
+    """
+    if not name:
+        return
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id FROM genres WHERE name = ?', (name,))
+    if not cursor.fetchone():
+        cursor.execute('INSERT INTO genres (name) VALUES (?)', (name,))
+
+    conn.commit()
+    conn.close()
+
+
 def insert_song(title, url, artist_name, genre_name):
     conn = connect_db()
     cursor = conn.cursor()
@@ -106,28 +142,16 @@ def insert_song(title, url, artist_name, genre_name):
 
 def insert_initial_data():
     try:
-        songs, genres, artists = load_json_data()
+        songs, genres, artists = load_json_data('data/data.json')
     except Exception as e:
         print(f"Грешка при зареждане на JSON: {e}")
         return
 
-    conn = connect_db()
-    cursor = conn.cursor()
-
     for artist in artists:
-        name = artist.get('name', '')
-        cursor.execute('SELECT id FROM artists WHERE name = ?', (name,))
-        if not cursor.fetchone():
-            cursor.execute('INSERT INTO artists (name) VALUES (?)', (name,))
+        insert_artist(artist.get('name', ''))
 
     for genre in genres:
-        name = genre.get('name', '')
-        cursor.execute('SELECT id FROM genres WHERE name = ?', (name,))
-        if not cursor.fetchone():
-            cursor.execute('INSERT INTO genres (name) VALUES (?)', (name,))
-
-    conn.commit()
-    conn.close()
+        insert_genre(genre.get('name', ''))
 
     for song in songs:
         insert_song(
