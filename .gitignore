@@ -1,5 +1,6 @@
 DB Browser for SQLite
 music_app.db
+temp_audio.mp3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
