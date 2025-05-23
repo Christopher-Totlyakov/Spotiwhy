@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from db_manager import get_all_songs, delete_song_by_title_and_artist, insert_song
+from db_manager import get_all_songs, delete_song_by_title_and_artist, insert_song, get_all_genres, get_all_artists
 
 import threading
 import os
@@ -19,6 +19,29 @@ class HomePage(tk.Frame):
 
         ttk.Label(self, text="Списък с песни",
                   font=("Arial", 16)).pack(pady=10)
+
+        filter_frame = ttk.Frame(self)
+        filter_frame.pack(pady=(0, 10))
+
+        ttk.Label(filter_frame, text="Заглавие:").pack(side="left")
+        self.title_filter = ttk.Entry(filter_frame)
+        self.title_filter.pack(side="left", padx=5)
+        self.title_filter.bind("<KeyRelease>", lambda e: self.load_songs())
+
+        ttk.Label(filter_frame, text="Жанр:").pack(side="left", padx=(10, 0))
+        self.genre_filter = ttk.Combobox(filter_frame, state="readonly")
+        self.genre_filter.pack(side="left", padx=5)
+        self.genre_filter.bind("<<ComboboxSelected>>", lambda e: self.load_songs())
+
+        ttk.Label(filter_frame, text="Изпълнител:").pack(side="left", padx=(10, 0))
+        self.artist_filter = ttk.Combobox(filter_frame, state="readonly")
+        self.artist_filter.pack(side="left", padx=5)
+        self.artist_filter.bind("<<ComboboxSelected>>", lambda e: self.load_songs())
+
+        self.clear_filters_btn = ttk.Button(
+            filter_frame, text="Изчисти филтрите", command=self.clear_filters)
+        self.clear_filters_btn.pack(side="left", padx=(10, 0))
+
 
         self.tree = ttk.Treeview(self, columns=(
             "title", "artist", "genre", "url"), show="headings")
@@ -44,10 +67,47 @@ class HomePage(tk.Frame):
         self.load_songs()
 
     def load_songs(self):
+        self.populate_filters()
+
+        title_query = self.title_filter.get().strip().lower()
+        selected_genre = self.genre_filter.get()
+        selected_artist = self.artist_filter.get()
+
         for row in self.tree.get_children():
             self.tree.delete(row)
+
         for song in get_all_songs():
+            title, artist, genre, url = song
+
+            if title_query and title_query not in title.lower():
+                continue
+            if selected_genre != "Всички жанрове" and selected_genre != genre:
+                continue
+            if selected_artist != "Всички изпълнители" and selected_artist != artist:
+                continue
+
             self.tree.insert("", "end", values=song)
+
+    def populate_filters(self):
+        genres = ["Всички жанрове"] + get_all_genres()
+        artists = ["Всички изпълнители"] + get_all_artists()
+
+        current_genre = self.genre_filter.get()
+        current_artist = self.artist_filter.get()
+
+        self.genre_filter["values"] = genres
+        self.artist_filter["values"] = artists
+
+        self.genre_filter.set(current_genre if current_genre else "Всички жанрове")
+        self.artist_filter.set(
+            current_artist if current_artist else "Всички изпълнители")
+
+    def clear_filters(self):
+        self.title_filter.delete(0, tk.END)
+        self.genre_filter.set("Всички жанрове")
+        self.artist_filter.set("Всички изпълнители")
+        self.load_songs()
+
 
     def show_context_menu(self, event):
         row = self.tree.identify_row(event.y)
