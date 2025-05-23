@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
+
+from db_manager import export_data_to_json
+
 from gui.add_song_page import AddSongPage
 from gui.home_page import HomePage
 from gui.import_json_page import ImportJsonPage
@@ -25,6 +29,10 @@ class MainWindow(tk.Tk):
             nav_frame, text="Добави съществуващ плейлист", command=lambda: self.show_frame("ImportJsonPage"))
         btn_import_json.pack(pady=10)
 
+        btn_export_json = ttk.Button(
+            nav_frame, text="Запази плейлиста", command=self.export_json)
+        btn_export_json.pack(pady=10)
+
         self.container = tk.Frame(self)
         self.container.pack(side="right", fill="both", expand=True)
 
@@ -43,6 +51,18 @@ class MainWindow(tk.Tk):
         if hasattr(frame, "load_songs"):
             frame.load_songs()
         frame.tkraise()
+
+    def export_json(self):
+        file_path = filedialog.asksaveasfilename(
+        defaultextension=".json", filetypes=[("JSON файлове", "*.json")], title="Запази плейлиста като JSON")
+
+        if file_path:
+            try:
+                export_data_to_json(file_path)
+            except Exception as e:
+                tk.messagebox.showerror("Грешка", f"Неуспешно запазване: {e}")
+            else:
+                tk.messagebox.showinfo("Успех", "Плейлистът беше запазен успешно.")
 
 
 

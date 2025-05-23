@@ -1,5 +1,6 @@
 import sqlite3
 from json_loader import load_json_data
+import json
 
 DB_NAME = "music_app.db"
 
@@ -175,3 +176,42 @@ def delete_song_by_title_and_artist(title, artist_name):
         cursor.execute('DELETE FROM songs WHERE id = ?', (song[0],))
         conn.commit()
     conn.close()
+
+
+def export_data_to_json(file_path):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT songs.title, artists.name, genres.name, songs.youtube_url
+        FROM songs
+        JOIN artists ON songs.artist_id = artists.id
+        JOIN genres ON songs.genre_id = genres.id
+    ''')
+    song_rows = cursor.fetchall()
+    songs = [
+        {
+            "title": row[0],
+            "artist": row[1],
+            "genre": row[2],
+            "youtube_url": row[3]
+        }
+        for row in song_rows
+    ]
+
+    cursor.execute('SELECT name FROM genres')
+    genres = [{"name": row[0]} for row in cursor.fetchall()]
+
+    cursor.execute('SELECT name FROM artists')
+    artists = [{"name": row[0]} for row in cursor.fetchall()]
+
+    conn.close()
+
+    data = {
+        "songs": songs,
+        "genres": genres,
+        "artists": artists
+    }
+
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(data, file, indent=2, ensure_ascii=False)
