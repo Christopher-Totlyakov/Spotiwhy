@@ -10,10 +10,12 @@ import pygame
 
 
 class HomePage(tk.Frame):
+
     def __init__(self, parent, controller):
         super().__init__(parent)
         pygame.mixer.init()
         self.controller = controller
+        self.current_audio_file = None
 
         ttk.Label(self, text="Списък с песни",
                   font=("Arial", 16)).pack(pady=10)
@@ -25,13 +27,20 @@ class HomePage(tk.Frame):
             self.tree.heading(col, text=text)
         self.tree.pack(fill="both", expand=True, padx=20, pady=10)
 
-
         self.context_menu = tk.Menu(self, tearoff=0)
-        self.context_menu.add_command(label="Пусни",    command=self.play_song)
-        self.context_menu.add_command(label="Редактирай", command=self.edit_song)
-        self.context_menu.add_command(label="Изтрий",   command=self.delete_song)
-
+        self.context_menu.add_command(
+            label="Пусни",     command=self.play_song)
+        self.context_menu.add_command(
+            label="Редактирай", command=self.edit_song)
+        self.context_menu.add_command(
+            label="Изтрий",     command=self.delete_song)
         self.tree.bind("<Button-3>", self.show_context_menu)
+
+        self.stop_button = ttk.Button(
+            self, text="Спри песента", command=self.stop_song)
+        self.stop_button.pack(pady=5)
+        self.stop_button.pack_forget()
+
         self.load_songs()
 
     def load_songs(self):
@@ -92,41 +101,71 @@ class HomePage(tk.Frame):
         ttk.Button(win, text="Запази", command=save).pack(pady=15)
 
     def play_song(self):
-        """Сваля само аудио чрез yt-dlp и пуска със pygame."""
+
         item = self.tree.selection()
+
         if not item:
             return
         youtube_url = self.tree.item(item)["values"][3]
 
-
         def download_and_play():
             try:
+                if pygame.mixer.music.get_busy():
+                    pygame.mixer.music.stop()
+                    try:
+                        pygame.mixer.music.unload()
+                    except:
+                        pass
+                    self._cleanup_file()
+
                 subprocess.run([
                     "yt-dlp",
                     "-x",
                     "--audio-format", "mp3",
+                    "--force-overwrites",
                     "-o", "temp_audio.%(ext)s",
                     youtube_url
                 ], check=True)
-        
+
                 files = glob.glob("temp_audio.*")
                 if not files:
                     raise FileNotFoundError("Не е намерен аудио файл.")
-                audio_file = files[0]
-        
-                pygame.mixer.music.load(audio_file)
+                self.current_audio_file = files[0]
+
+                pygame.mixer.music.load(self.current_audio_file)
                 pygame.mixer.music.play()
-        
+                self.stop_button.pack(pady=5)
+
                 while pygame.mixer.music.get_busy():
-                    pygame.time.Clock().tick(10)
-        
-                for f in files:
-                    try:
-                        os.remove(f)
-                    except:
-                        pass
-                    
+                    pygame.time.wait(500)
+
+                self._cleanup_file()
+
             except Exception as e:
                 messagebox.showerror("Грешка при пускане", str(e))
-        
+
         threading.Thread(target=download_and_play, daemon=True).start()
+
+    def stop_song(self):
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.stop()
+            try:
+                pygame.mixer.music.unload()
+            except:
+                pass
+        self._cleanup_file()
+
+    def _cleanup_file(self):
+        try:
+            pygame.mixer.music.stop()
+            pygame.mixer.music.unload()
+        except:
+            pass
+
+        self.stop_button.pack_forget()
+
+        for f in glob.glob("temp_audio.*"):
+            try:
+                os.remove(f)
+            except Exception as e:
+                print(f"Грешка при триене на файл: {e}")
