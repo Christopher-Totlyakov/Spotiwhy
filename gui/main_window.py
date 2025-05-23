@@ -1,61 +1,47 @@
 import tkinter as tk
 from tkinter import ttk
-from db_manager import connect_db
-from gui.add_song_tab import create_add_song_tab
+from gui.add_song_page import AddSongPage
+from gui.home_page import HomePage
 
 
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Music App")
+        self.title("Spotiwhy")
         self.geometry("800x600")
-        self._create_widgets()
-        self._populate_data()
 
-    def _create_widgets(self): 
+        nav_frame = tk.Frame(self, width=200, bg="#cccccc")
+        nav_frame.pack(side="left", fill="y")
 
-        self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill='both', expand=True)
+        btn_home = ttk.Button(nav_frame, text="Начало",
+                              command=lambda: self.show_frame("HomePage"))
+        btn_home.pack(pady=10)
 
-        self.songs_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.songs_frame, text='Песни')
-        self.songs_tree = ttk.Treeview(self.songs_frame, columns=(
-            'Title', 'Artist', 'Genre'), show='headings')
-        for col in ('Title', 'Artist', 'Genre'):
-            self.songs_tree.heading(col, text=col)
-            self.songs_tree.column(col, width=200)
-        self.songs_tree.pack(fill='both', expand=True, padx=10, pady=10)
+        btn_add_song = ttk.Button(
+            nav_frame, text="Добави песен", command=lambda: self.show_frame("AddSongPage"))
+        btn_add_song.pack(pady=10)
 
-        self.add_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.add_frame, text='Добави песен')
-        ttk.Label(self.add_frame, text='Заглавие:').grid(
-            row=0, column=0, sticky='w', padx=5, pady=5)
-        self.title_entry = ttk.Entry(self.add_frame)
-        self.title_entry.grid(row=0, column=1, padx=5, pady=5)
+        self.container = tk.Frame(self)
+        self.container.pack(side="right", fill="both", expand=True)
 
-    def _populate_data(self):
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(
-            '''
-            SELECT songs.title, artists.name, genres.name
-            FROM songs
-            JOIN artists ON songs.artist_id = artists.id
-            JOIN genres ON songs.genre_id = genres.id
-            '''
-        )
-        for row in cursor.fetchall():
-            self.songs_tree.insert('', 'end', values=row)
-        conn.close()
+        self.frames = {}
+
+        for PageClass in (HomePage, AddSongPage):
+            page_name = PageClass.__name__
+            frame = PageClass(parent=self.container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame("HomePage")
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        if hasattr(frame, "load_songs"):
+            frame.load_songs()
+        frame.tkraise()
+
 
 
 def run():
-    root = tk.Tk()
-    root.title("Музикално приложение")
-
-    notebook = ttk.Notebook(root)
-    notebook.pack(fill='both', expand=True)
-
-    create_add_song_tab(notebook)
-
-    root.mainloop()
+    app = MainWindow()
+    app.mainloop()

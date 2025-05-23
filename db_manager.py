@@ -54,6 +54,20 @@ def get_all_genres():
     return genres
 
 
+def get_all_songs():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT songs.title, artists.name, genres.name, songs.youtube_url
+        FROM songs
+        JOIN artists ON songs.artist_id = artists.id
+        JOIN genres ON songs.genre_id = genres.id
+    ''')
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+
 def insert_song(title, url, artist_name, genre_name):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
