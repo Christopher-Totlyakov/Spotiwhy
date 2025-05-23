@@ -160,3 +160,18 @@ def insert_initial_data():
             artist_name=song.get('artist', ''),
             genre_name=song.get('genre', '')
         )
+
+
+def delete_song_by_title_and_artist(title, artist_name):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT songs.id FROM songs
+        JOIN artists ON songs.artist_id = artists.id
+        WHERE songs.title = ? AND artists.name = ?
+    ''', (title, artist_name))
+    song = cursor.fetchone()
+    if song:
+        cursor.execute('DELETE FROM songs WHERE id = ?', (song[0],))
+        conn.commit()
+    conn.close()
