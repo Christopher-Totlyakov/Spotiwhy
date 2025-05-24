@@ -5,8 +5,9 @@ from db_manager import insert_song, get_all_artists, get_all_genres
 
 class AddSongPage(tk.Frame):
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent,  bg="#7df26f")
         self.controller = controller
+
 
         ttk.Label(self, text="Добави нова песен",
                   font=("Arial", 16)).pack(pady=10)
@@ -40,6 +41,32 @@ class AddSongPage(tk.Frame):
         ttk.Entry(form, textvariable=self.rating_var).grid(row=4, column=1)
 
         ttk.Button(self, text="Добави", command=self.add_song).pack(pady=10)
+
+        label_font = ("Arial", 12, "bold")
+
+        ttk.Label(form, text="Заглавие:", font=label_font).grid(
+            row=0, column=0, sticky="e", padx=5, pady=5)
+        ttk.Entry(form, textvariable=self.title_var).grid(
+            row=0, column=1, padx=5, pady=5)
+
+        ttk.Label(form, text="YouTube URL:", font=label_font).grid(
+            row=1, column=0, sticky="e", padx=5, pady=5)
+        ttk.Entry(form, textvariable=self.url_var).grid(
+            row=1, column=1, padx=5, pady=5)
+
+        ttk.Label(form, text="Изпълнител:", font=label_font).grid(
+            row=2, column=0, sticky="e", padx=5, pady=5)
+        self.artist_cb.grid(row=2, column=1, padx=5, pady=5)
+
+        ttk.Label(form, text="Жанр:", font=label_font).grid(
+            row=3, column=0, sticky="e", padx=5, pady=5)
+        self.genre_cb.grid(row=3, column=1, padx=5, pady=5)
+
+        ttk.Label(form, text="Рейтинг (0.0 - 10.0):",
+                  font=label_font).grid(row=4, column=0, sticky="e", padx=5, pady=5)
+        ttk.Entry(form, textvariable=self.rating_var).grid(
+            row=4, column=1, padx=5, pady=5)
+
 
     def add_song(self):
         title = self.title_var.get()

@@ -12,28 +12,77 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Spotiwhy")
-        self.geometry("800x600")
+        self.geometry("1300x400")        
 
-        nav_frame = tk.Frame(self, width=200, bg="#cccccc")
+
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        nav_frame = tk.Frame(self, width=200, bg="#6bd85e")  # По-тъмно зелено
+   
+
+        # Основен фон за всички ttk widgets
+        style.configure(".", background="#f0f0f0",
+                        foreground="#000000", font=("Arial", 10))       
+
+        # За Frame и Label
+        style.configure("TFrame", background="#7df26f")
+        style.configure("TLabel", background="#7df26f", foreground="#333333")
+
+        # За Entry и Combobox
+        style.configure("TEntry", fieldbackground="#ffffff")
+        style.configure("TCombobox", fieldbackground="#ffffff",
+                        background="#ffffff")
+
+        # За бутоните
+        style.configure("TButton",
+                        background="#1b5429",
+                        foreground="#ffffff",     
+                        font=("Arial", 10, "bold"))
+        style.map("TButton",
+                  background=[("active", "#000000")], 
+                  foreground=[("active", "#ffffff")])
+
+        # За Treeview
+        style.configure("Treeview",
+                        background="#ffffff",
+                        foreground="#000000",
+                        fieldbackground="#ffffff")
+        style.map("Treeview", background=[("selected", "#1b5429")])
+
+        style.configure("Treeview.Heading",
+                        background="#1b5429",
+                        foreground="#ffffff",
+                        font=("Arial", 10, "bold"))
+        style.map("Treeview.Heading",
+                  # Цвят при ховър (пример: по-светло зелено)
+                  background=[("active", "#000000")],
+                  foreground=[("active", "#ffffff")])
+
+
+        nav_frame = tk.Frame(self, width=250, bg="#24823c")
         nav_frame.pack(side="left", fill="y")
 
-        btn_home = ttk.Button(nav_frame, text="Начало",
+        button_container = tk.Frame(nav_frame, bg="#24823c")
+        button_container.place(relx=0.5, rely=0.5, anchor="center")
+
+        btn_home = ttk.Button(button_container, text="Начало",
                               command=lambda: self.show_frame("HomePage"))
         btn_home.pack(pady=10)
 
         btn_add_song = ttk.Button(
-            nav_frame, text="Добави песен", command=lambda: self.show_frame("AddSongPage"))
+            button_container, text="Добави песен", command=lambda: self.show_frame("AddSongPage"))
         btn_add_song.pack(pady=10)
 
         btn_import_json = ttk.Button(
-            nav_frame, text="Добави съществуващ плейлист", command=lambda: self.show_frame("ImportJsonPage"))
+            button_container, text="Добави съществуващ плейлист", command=lambda: self.show_frame("ImportJsonPage"))
         btn_import_json.pack(pady=10)
 
         btn_export_json = ttk.Button(
-            nav_frame, text="Запази плейлиста", command=self.export_json)
+            button_container, text="Запази плейлиста", command=self.export_json)
         btn_export_json.pack(pady=10)
 
-        self.container = tk.Frame(self)
+        self.container = tk.Frame(self, bg="#7df26f")
         self.container.pack(side="right", fill="both", expand=True)
 
         self.frames = {}

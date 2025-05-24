@@ -6,12 +6,11 @@ from db_manager import insert_song, insert_genre, insert_artist
 
 class ImportJsonPage(tk.Frame):
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent,  bg="#7df26f")
         self.controller = controller
-        self.configure(bg="white")
 
         tk.Label(self, text="Импортиране на JSON файл",
-                 font=("Arial", 16), bg="white").pack(pady=10)
+                 font=("Arial", 16), bg="#7df26f").pack(pady=80)
 
         tk.Button(self, text="Избери JSON файл", command=self.import_json,
                   bg="#4CAF50", fg="white").pack(pady=10)

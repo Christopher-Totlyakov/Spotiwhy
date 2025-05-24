@@ -12,7 +12,7 @@ import pygame
 class HomePage(tk.Frame):
 
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent,  bg="#7df26f")
         pygame.mixer.init()
         self.controller = controller
         self.current_audio_file = None
