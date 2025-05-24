@@ -38,6 +38,18 @@ class HomePage(tk.Frame):
         self.artist_filter.pack(side="left", padx=5)
         self.artist_filter.bind("<<ComboboxSelected>>", lambda e: self.load_songs())
 
+        ttk.Label(filter_frame, text="Рейтинг от:").pack(
+            side="left", padx=(10, 0))
+        self.rating_min = ttk.Entry(filter_frame, width=5)
+        self.rating_min.pack(side="left", padx=(0, 5))
+        self.rating_min.bind("<KeyRelease>", lambda e: self.load_songs())
+
+        ttk.Label(filter_frame, text="до:").pack(side="left")
+        self.rating_max = ttk.Entry(filter_frame, width=5)
+        self.rating_max.pack(side="left", padx=(0, 10))
+        self.rating_max.bind("<KeyRelease>", lambda e: self.load_songs())
+
+
         self.clear_filters_btn = ttk.Button(
             filter_frame, text="Изчисти филтрите", command=self.clear_filters)
         self.clear_filters_btn.pack(side="left", padx=(10, 0))
@@ -72,6 +84,21 @@ class HomePage(tk.Frame):
         title_query = self.title_filter.get().strip().lower()
         selected_genre = self.genre_filter.get()
         selected_artist = self.artist_filter.get()
+        min_rating = self.rating_min.get().strip().lower()
+        max_rating = self.rating_max.get().strip().lower()
+
+        try:
+            min_rating = float(self.rating_min.get()
+                               ) if self.rating_min.get() else None
+        except ValueError:
+            min_rating = None
+
+        try:
+            max_rating = float(self.rating_max.get()
+                               ) if self.rating_max.get() else None
+        except ValueError:
+            max_rating = None
+
 
         for row in self.tree.get_children():
             self.tree.delete(row)
@@ -79,6 +106,10 @@ class HomePage(tk.Frame):
         for song in get_all_songs():
             title, artist, genre, rating, url = song
 
+            if min_rating is not None and rating < min_rating:
+                continue
+            if max_rating is not None and rating > max_rating:
+                continue
             if title_query and title_query not in title.lower():
                 continue
             if selected_genre != "Всички жанрове" and selected_genre != genre:
@@ -103,6 +134,8 @@ class HomePage(tk.Frame):
             current_artist if current_artist else "Всички изпълнители")
 
     def clear_filters(self):
+        self.rating_min.delete(0, tk.END)
+        self.rating_max.delete(0, tk.END)
         self.title_filter.delete(0, tk.END)
         self.genre_filter.set("Всички жанрове")
         self.artist_filter.set("Всички изпълнители")
