@@ -12,29 +12,25 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Spotiwhy")
-        self.geometry("1300x400")        
+        self.geometry("1300x430")        
 
 
         style = ttk.Style()
         style.theme_use("clam")
 
-        nav_frame = tk.Frame(self, width=200, bg="#6bd85e")  # По-тъмно зелено
+        nav_frame = tk.Frame(self, width=200, bg="#6bd85e")
    
 
-        # Основен фон за всички ttk widgets
         style.configure(".", background="#f0f0f0",
                         foreground="#000000", font=("Arial", 10))       
 
-        # За Frame и Label
         style.configure("TFrame", background="#7df26f")
         style.configure("TLabel", background="#7df26f", foreground="#333333")
 
-        # За Entry и Combobox
         style.configure("TEntry", fieldbackground="#ffffff")
         style.configure("TCombobox", fieldbackground="#ffffff",
                         background="#ffffff")
 
-        # За бутоните
         style.configure("TButton",
                         background="#1b5429",
                         foreground="#ffffff",     
@@ -43,7 +39,6 @@ class MainWindow(tk.Tk):
                   background=[("active", "#000000")], 
                   foreground=[("active", "#ffffff")])
 
-        # За Treeview
         style.configure("Treeview",
                         background="#ffffff",
                         foreground="#000000",
@@ -55,7 +50,6 @@ class MainWindow(tk.Tk):
                         foreground="#ffffff",
                         font=("Arial", 10, "bold"))
         style.map("Treeview.Heading",
-                  # Цвят при ховър (пример: по-светло зелено)
                   background=[("active", "#000000")],
                   foreground=[("active", "#ffffff")])
 

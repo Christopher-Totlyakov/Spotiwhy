@@ -173,7 +173,7 @@ class HomePage(tk.Frame):
         old_title, old_artist, old_genre, old_rating, old_url = self.tree.item(item)[
             "values"]
 
-        win = tk.Toplevel(self)
+        win = tk.Toplevel(self, bg="#7df26f")
         win.title("Редактиране на песен")
         win.geometry("250x300")
 
@@ -289,6 +289,6 @@ class HomePage(tk.Frame):
                 text="Среден рейтинг: Няма налични песни")
             return
 
-        total = sum(song[3] for song in songs)  # индекс 3 = рейтинг
+        total = sum(song[3] for song in songs) 
         avg = total / len(songs)
         self.avg_rating_label.config(text=f"Среден рейтинг: {avg:.2f}")

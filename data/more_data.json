@@ -1,0 +1,80 @@
+{
+  "songs":[
+    {
+      "title": "Shape of You",
+      "artist": "Ed Sheeran",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+      "rating": 9.2
+    },
+    {
+      "title": "Save Your Tears",
+      "artist": "The Weeknd",
+      "genre": "Synthpop",
+      "youtube_url": "https://www.youtube.com/watch?v=XXYlFuWEuKI",
+      "rating": 9.5
+    },
+    {
+      "title": "Shallow",
+      "artist": "Lady Gaga",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=SlWBJ7MTV8M",
+      "rating": 9.3
+    },
+    {
+      "title": "Rolling in the Deep",
+      "artist": "Adele",
+      "genre": "Soul",
+      "youtube_url": "https://www.youtube.com/watch?v=rYEDA3JcQqw",
+      "rating": 9.4
+    },
+    {
+      "title": "Take On Me",
+      "artist": "A-ha",
+      "genre": "Synthpop",
+      "youtube_url": "https://www.youtube.com/watch?v=djV11Xbc914",
+      "rating": 9.0
+    },
+    {
+      "title": "Thriller",
+      "artist": "Michael Jackson",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=BsuEjAw5hg0",
+      "rating": 9.6
+    },
+    {
+      "title": "Smells Like Teen Spirit",
+      "artist": "Nirvana",
+      "genre": "Grunge",
+      "youtube_url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+      "rating": 9.4
+    },
+    {
+      "title": "Uptown Funk",
+      "artist": "Mark Ronson ft. Bruno Mars",
+      "genre": "Funk",
+      "youtube_url": "https://www.youtube.com/watch?v=OPf0YbXqDm0",
+      "rating": 9.2
+    },
+    {
+      "title": "Billie Jean",
+      "artist": "Michael Jackson",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=Zi_XLOBDo_Y",
+      "rating": 9.5
+    }
+  ],  
+  "genres": [
+    { "name": "Rock" },
+    { "name": "Pop" },
+    { "name": "Jazz" },
+    { "name": "Funk" },
+    { "name": "R&B" }
+  ],
+  "artists": [
+    { "name": "The Beatles" },
+    { "name": "Queen" },
+    { "name": "Adele" },
+    { "name": "Ed Sheeran" }
+  ]
+}

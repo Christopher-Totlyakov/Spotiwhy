@@ -1,44 +1,87 @@
 {
-    "songs": [
-      {
-        "title": "ererer",
-        "artist": "eeeeeeeeeeeeee",
-        "genre": "Rrrrrrrrrrrrock",
-        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA",
-        "rating": 0
-      },
-      {
-        "title": "Hey Jude",
-        "artist": "The Beatles",
-        "genre": "Rock",
-        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA",
-        "rating": 0
-      },
-      {
-        "title": "Bohemian Rhapsody",
-        "artist": "Queen",
-        "genre": "Rock",
-        "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
-        "rating": 0
-      },
-      {
-        "title": "122",
-        "artist": "Adele",
-        "genre": "Pop",
-        "youtube_url": "https://www.youtube.com/watch?v=YQHsXMglC9A",
-        "rating": 0
-      }
-    ],
-    "genres": [
-      { "name": "Rock" },
-      { "name": "Pop" },
-      { "name": "Jazz" },
-      { "name": "test" }
-    ],
-    "artists": [
-      { "name": "The Beatles" },
-      { "name": "Queen" },
-      { "name": "Adele" }
-    ]
-  }
+  "songs": [
+    {
+      "title": "Let It Be",
+      "artist": "The Beatles",
+      "genre": "Rock",
+      "youtube_url": "https://www.youtube.com/watch?v=QDYfEBY9NM4",
+      "rating": 9.5
+    },
+    {
+      "title": "Don't Let Me Down",
+      "artist": "The Beatles",
+      "genre": "Rock",
+      "youtube_url": "https://www.youtube.com/watch?v=NCtzkaL2t_Y",
+      "rating": 9.5
+    },
+    {
+      "title": "Shape of You",
+      "artist": "Ed Sheeran",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+      "rating": 8.7
+    },
+    {
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "genre": "Rock",
+      "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+      "rating": 9.8
+    },
+    {
+      "title": "Rolling in the Deep",
+      "artist": "Adele",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=rYEDA3JcQqw",
+      "rating": 9.2
+    },
+    {
+      "title": "Someone Like You",
+      "artist": "Adele",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=hLQl3WQQoQ0",
+      "rating": 9.4
+    },
+    {
+      "title": "Hello",
+      "artist": "Adele",
+      "genre": "Soul",
+      "youtube_url": "https://www.youtube.com/watch?v=YQHsXMglC9A",
+      "rating": 9.6
+    },
+    {
+      "title": "Set Fire to the Rain",
+      "artist": "Adele",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=a2giXO6eyuI",
+      "rating": 9.1
+    },
+    {
+      "title": "Easy On Me",
+      "artist": "Adele",
+      "genre": "Pop",
+      "youtube_url": "https://www.youtube.com/watch?v=X-yIEMduRXk",
+      "rating": 9.0
+    },
+    {
+      "title": "When We Were Young",
+      "artist": "Adele",
+      "genre": "Soul",
+      "youtube_url": "https://www.youtube.com/watch?v=a1IuJLebHgM",
+      "rating": 8.9
+    }
   
+  ],
+  "genres": [
+    { "name": "Rock" },
+    { "name": "Pop" },
+    { "name": "Jazz" },
+    { "name": "R&B" }
+  ],
+  "artists": [
+    { "name": "The Beatles" },
+    { "name": "Queen" },
+    { "name": "Adele" },
+    { "name": "Ed Sheeran" }
+  ]
+}
