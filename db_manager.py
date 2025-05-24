@@ -31,6 +31,7 @@ def init_db():
             artist_id INTEGER,
             genre_id INTEGER,
             youtube_url TEXT,
+            rating REAL,
             FOREIGN KEY (artist_id) REFERENCES artists(id),
             FOREIGN KEY (genre_id) REFERENCES genres(id)
         )
@@ -60,7 +61,7 @@ def get_all_songs():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT songs.title, artists.name, genres.name, songs.youtube_url
+        SELECT songs.title, artists.name, genres.name, songs.rating, songs.youtube_url 
         FROM songs
         JOIN artists ON songs.artist_id = artists.id
         JOIN genres ON songs.genre_id = genres.id
@@ -106,7 +107,7 @@ def insert_genre(name):
     conn.close()
 
 
-def insert_song(title, url, artist_name, genre_name):
+def insert_song(title, url, artist_name, genre_name, rating=0):
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -133,9 +134,9 @@ def insert_song(title, url, artist_name, genre_name):
     song = cursor.fetchone()
     if not song:
         cursor.execute('''
-            INSERT INTO songs (title, youtube_url, artist_id, genre_id)
-            VALUES (?, ?, ?, ?)
-        ''', (title, url, artist_id, genre_id))
+            INSERT INTO songs (title, youtube_url, artist_id, genre_id, rating)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (title, url, artist_id, genre_id, rating))
 
     conn.commit()
     conn.close()
@@ -159,7 +160,8 @@ def insert_initial_data():
             title=song.get('title', ''),
             url=song.get('youtube_url', ''),
             artist_name=song.get('artist', ''),
-            genre_name=song.get('genre', '')
+            genre_name=song.get('genre', ''),
+            rating=song.get('rating', 0)
         )
 
 
@@ -183,7 +185,7 @@ def export_data_to_json(file_path):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT songs.title, artists.name, genres.name, songs.youtube_url
+        SELECT songs.title, artists.name, genres.name, songs.youtube_url, songs.rating
         FROM songs
         JOIN artists ON songs.artist_id = artists.id
         JOIN genres ON songs.genre_id = genres.id
@@ -194,7 +196,8 @@ def export_data_to_json(file_path):
             "title": row[0],
             "artist": row[1],
             "genre": row[2],
-            "youtube_url": row[3]
+            "youtube_url": row[3],
+            "rating": row[4]
         }
         for row in song_rows
     ]

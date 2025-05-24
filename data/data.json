@@ -4,25 +4,29 @@
         "title": "ererer",
         "artist": "eeeeeeeeeeeeee",
         "genre": "Rrrrrrrrrrrrock",
-        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA"
+        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA",
+        "rating": 0
       },
       {
         "title": "Hey Jude",
         "artist": "The Beatles",
         "genre": "Rock",
-        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA"
+        "youtube_url": "https://www.youtube.com/watch?v=A_MjCqQoLLA",
+        "rating": 0
       },
       {
         "title": "Bohemian Rhapsody",
         "artist": "Queen",
         "genre": "Rock",
-        "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ"
+        "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+        "rating": 0
       },
       {
         "title": "122",
         "artist": "Adele",
         "genre": "Pop",
-        "youtube_url": "https://www.youtube.com/watch?v=YQHsXMglC9A"
+        "youtube_url": "https://www.youtube.com/watch?v=YQHsXMglC9A",
+        "rating": 0
       }
     ],
     "genres": [

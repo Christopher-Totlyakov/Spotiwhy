@@ -44,9 +44,9 @@ class HomePage(tk.Frame):
 
 
         self.tree = ttk.Treeview(self, columns=(
-            "title", "artist", "genre", "url"), show="headings")
+            "title", "artist", "genre", "rating", "url"), show="headings")
         for col, text in [("title", "Заглавие"), ("artist", "Изпълнител"),
-                          ("genre", "Жанр"), ("url", "YouTube URL")]:
+                          ("genre", "Жанр"), ("rating", "Рейтинг"), ("url", "YouTube URL")]:
             self.tree.heading(col, text=text)
         self.tree.pack(fill="both", expand=True, padx=20, pady=10)
 
@@ -77,7 +77,7 @@ class HomePage(tk.Frame):
             self.tree.delete(row)
 
         for song in get_all_songs():
-            title, artist, genre, url = song
+            title, artist, genre, rating, url = song
 
             if title_query and title_query not in title.lower():
                 continue
@@ -128,12 +128,12 @@ class HomePage(tk.Frame):
         item = self.tree.selection()
         if not item:
             return
-        old_title, old_artist, old_genre, old_url = self.tree.item(item)[
+        old_title, old_artist, old_genre, old_rating, old_url = self.tree.item(item)[
             "values"]
 
         win = tk.Toplevel(self)
         win.title("Редактиране на песен")
-        win.geometry("300x250")
+        win.geometry("250x300")
 
         def labeled_entry(label, val):
             ttk.Label(win, text=label).pack(anchor="w", padx=10, pady=(5, 0))
@@ -146,14 +146,25 @@ class HomePage(tk.Frame):
         artist_e = labeled_entry("Изпълнител",  old_artist)
         genre_e = labeled_entry("Жанр",        old_genre)
         url_e = labeled_entry("YouTube URL", old_url)
+        rating_e = labeled_entry("рейтинг", old_rating)
 
         def save():
             delete_song_by_title_and_artist(old_title, old_artist)
+
+            try:
+                rating = float(rating_e.get().strip())
+                if not (0.0 <= rating <= 10.0):
+                    raise ValueError
+            except ValueError:
+                messagebox.showerror("Грешка", "Рейтингът трябва да е число между 0.0 и 10.0.")
+                return
+
             insert_song(
                 title=title_e.get().strip(),
                 url=url_e.get().strip(),
                 artist_name=artist_e.get().strip(),
-                genre_name=genre_e.get().strip()
+                genre_name=genre_e.get().strip(),
+                rating=rating
             )
             self.load_songs()
             win.destroy()
@@ -166,7 +177,7 @@ class HomePage(tk.Frame):
 
         if not item:
             return
-        youtube_url = self.tree.item(item)["values"][3]
+        youtube_url = self.tree.item(item)["values"][4]
 
         def download_and_play():
             try:

@@ -39,7 +39,8 @@ class ImportJsonPage(tk.Frame):
                     title=song.get('title', ''),
                     url=song.get('youtube_url', ''),
                     artist_name=song.get('artist', ''),
-                    genre_name=song.get('genre', '')
+                    genre_name=song.get('genre', ''),
+                    rating=song.get('rating', '')
                 )
             messagebox.showinfo(
                 "Успех", f"Успешно импортирани {len(songs)} песни, {len(artists)} изпълнители, {len(genres)} жанрове.")
