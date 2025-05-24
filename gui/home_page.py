@@ -20,6 +20,9 @@ class HomePage(tk.Frame):
         ttk.Label(self, text="Списък с песни",
                   font=("Arial", 16)).pack(pady=10)
 
+        self.avg_rating_label = ttk.Label(self, text="", font=("Arial", 12, "bold"))
+        self.avg_rating_label.pack(pady=(0, 10))
+
         filter_frame = ttk.Frame(self)
         filter_frame.pack(pady=(0, 10))
 
@@ -103,6 +106,8 @@ class HomePage(tk.Frame):
         for row in self.tree.get_children():
             self.tree.delete(row)
 
+        filtered_songs = []
+
         for song in get_all_songs():
             title, artist, genre, rating, url = song
 
@@ -117,7 +122,11 @@ class HomePage(tk.Frame):
             if selected_artist != "Всички изпълнители" and selected_artist != artist:
                 continue
 
+            filtered_songs.append(song)
+            
             self.tree.insert("", "end", values=song)
+
+            self.update_average_rating(filtered_songs)
 
     def populate_filters(self):
         genres = ["Всички жанрове"] + get_all_genres()
@@ -273,3 +282,13 @@ class HomePage(tk.Frame):
                 os.remove(f)
             except Exception as e:
                 print(f"Грешка при триене на файл: {e}")
+
+    def update_average_rating(self, songs):
+        if not songs:
+            self.avg_rating_label.config(
+                text="Среден рейтинг: Няма налични песни")
+            return
+
+        total = sum(song[3] for song in songs)  # индекс 3 = рейтинг
+        avg = total / len(songs)
+        self.avg_rating_label.config(text=f"Среден рейтинг: {avg:.2f}")
